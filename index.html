@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>እኛ ምንድን ነን? ❤️</title>
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --soft-pink: #ffccd5;
+            --deep-red: #c9184a;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            z-index: 10;
+            max-width: 90%;
+            width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            color: var(--deep-red);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p {
+            color: #555;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button {
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: bold;
+            color: white;
+        }
+
+        .friend-btn { background-color: #4cc9f0; }
+        .more-btn { background-color: #f72585; }
+        .relationship-btn { background-color: #ff4d6d; }
+        .none-btn { 
+            background-color: #adb5bd; 
+            position: relative;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        #response-area {
+            margin-top: 2rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-big {
+            font-size: 4rem;
+            animation: bounce 1s infinite;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            color: var(--deep-red);
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Heart Animation */
+        .heart {
+            position: absolute;
+            color: var(--primary-pink);
+            font-size: 20px;
+            pointer-events: none;
+            animation: float 4s linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Amharic Text Specifics */
+        .amharic {
+            font-family: 'Kefa', 'Abyssinica SIL', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="amharic">እኛ ምንድን ነን? ✨</h1>
+        <p class="amharic">እባክሽን/ህን የምትሰማውን/ሽን ምረጥ/ጪ</p>
+
+        <div class="btn-group">
+            <button class="friend-btn amharic" onclick="respond('friend')">ጓደኛ 🤝</button>
+            <button class="more-btn amharic" onclick="respond('more')">ከጓደኛ በላይ 😏</button>
+            <button class="relationship-btn amharic" onclick="respond('love')">የፍቅር ጓደኛ ❤️</button>
+            <button id="no-btn" class="none-btn amharic" onmouseover="moveButton()" onclick="respond('none')">ምንም 🤷</button>
+        </div>
+
+        <div id="response-area">
+            <!-- Content will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        function respond(choice) {
+            const area = document.getElementById('response-area');
+            let emoji = '';
+            let text = '';
+            
+            // Clear previous
+            area.innerHTML = '';
+
+            if (choice === 'friend') {
+                emoji = '😊';
+                text = 'ምርጥ ጓደኛዬ! ሁሌም አከብርሃለሁ/ሻለሁ! ✨';
+                createHearts(10);
+            } else if (choice === 'more') {
+                emoji = '😳';
+                text = 'ዋው! እኔም እንደዛው አስባለሁ... ገባኝ! 😉';
+                createHearts(30);
+            } else if (choice === 'love') {
+                emoji = '💖';
+                text = 'እወድሃለሁ/ሻለሁ! የኔ ልዩ! 🌹';
+                createHearts(60);
+                startConfetti();
+            } else if (choice === 'none') {
+                emoji = '😅';
+                text = 'እሺ! ግን መምረጥህ አይቀርም! 😜';
+            }
+
+            area.innerHTML = `
+                <div class="emoji-big">${emoji}</div>
+                <div class="message amharic">${text}</div>
+            `;
+        }
+
+        // Fun Dodge Logic for the "None" button
+        function moveButton() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        // Floating Hearts Background
+        function createHearts(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Initial small floating hearts
+        setInterval(() => createHearts(1), 1000);
+
+    </script>
+</body>
+</html>
